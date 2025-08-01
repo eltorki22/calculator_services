@@ -54,32 +54,41 @@ function calculate() {
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-//     navigator.serviceWorker
-//       .register('/calculator_services/sw.js')
-//       .then((reg) => console.log('Service Worker Registered:', reg.scope))
-//       .catch((err) => console.error('Service Worker Error:', err));
-//   });
+ 
+    // وظيفة للتأكد أن الصوت يشغل فقط بعد تفاعل المستخدم
+let userInteracted = false;
 
-navigator.serviceWorker.register('/calculator_services/sw.js').then((reg) => {
-  console.log('Service Worker Registered:', reg.scope);
+document.body.addEventListener('click', () => {
+  userInteracted = true;
+  if (Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}, { once: true });  // مرة واحدة فقط
 
-  // التحقق من وجود تحديث
-  reg.onupdatefound = () => {
-    const newSW = reg.installing;
-    newSW.onstatechange = () => {
-      if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
-        // إظهار إشعار
-        if (Notification.permission === 'granted') {
-          new Notification("🔄 تم تحديث التطبيق", {
-            body: "تم تحديث الكاش، يُفضل إعادة تحميل الصفحة.",
-            icon: "/calculator_services/img/apple-touch-icon.png"
-          });
-        }
-      }
-    };
-  };
-});
+function playNotificationSound() {
+  if (!userInteracted) return; // لن يشغل الصوت إلا بعد تفاعل المستخدم
+  const audio = new Audio('/calculator_services/sounds/1.mp3');
+  audio.play().catch((e) => console.warn('الصوت لم يعمل:', e));
+}
 
+function sendNotificationWithSound(title, body) {
+  if (Notification.permission === 'granted') {
+    new Notification(title, {
+      body,
+      icon: '/calculator_services/img/apple-touch-icon.png'
+    });
+    playNotificationSound();
+  }
+}
+
+// إشعار كل 20 ثانية فقط إذا الإذن granted والمستخدم تفاعل
+setInterval(() => {
+  if (Notification.permission === 'granted' && userInteracted) {
+    sendNotificationWithSound('🔔 تنبيه', 'مر 20 ثانية وانت بتستخدم الآلة الحاسبة');
+  }
+}, 20000);
+
+  });
 }
 
 
