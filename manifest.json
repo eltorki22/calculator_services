@@ -1,7 +1,7 @@
 {
   "name": "Solly Calculator",
   "short_name": "solly_calc",
-  "start_url": "/calculator_services/",
+  "start_url": "/calculator_services/index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ff9900",
