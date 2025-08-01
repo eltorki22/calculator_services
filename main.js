@@ -69,28 +69,65 @@ if ('serviceWorker' in navigator) {
 
 
 
+// let deferredPrompt;
+// const installBtn = document.getElementById('installBtn');
+
+// // حدث يظهر عند توفّر خيار التثبيت
+// window.addEventListener('beforeinstallprompt', (e) => {
+//   e.preventDefault(); // منع ظهور البانر التلقائي
+//   deferredPrompt = e;
+//   installBtn.style.display = 'block'; // إظهار الزر
+// });
+
+// // لما يضغط المستخدم على الزر
+// installBtn.addEventListener('click', () => {
+//   installBtn.style.display = 'none'; // إخفاؤه مؤقتًا
+//   if (deferredPrompt) {
+//     deferredPrompt.prompt(); // إظهار نافذة التثبيت
+//     deferredPrompt.userChoice.then((choiceResult) => {
+//       if (choiceResult.outcome === 'accepted') {
+//         console.log('User accepted the install prompt');
+//       } else {
+//         console.log('User dismissed the install prompt');
+//       }
+//       deferredPrompt = null;
+//     });
+//   }
+// });
+
+
+
 let deferredPrompt;
 const installBtn = document.getElementById('installBtn');
 
-// حدث يظهر عند توفّر خيار التثبيت
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault(); // منع ظهور البانر التلقائي
-  deferredPrompt = e;
-  installBtn.style.display = 'block'; // إظهار الزر
-});
+// هل التطبيق يعمل كـ PWA؟
+const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
 
-// لما يضغط المستخدم على الزر
-installBtn.addEventListener('click', () => {
-  installBtn.style.display = 'none'; // إخفاؤه مؤقتًا
-  if (deferredPrompt) {
-    deferredPrompt.prompt(); // إظهار نافذة التثبيت
-    deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted the install prompt');
-      } else {
-        console.log('User dismissed the install prompt');
-      }
-      deferredPrompt = null;
-    });
-  }
-});
+// تغيير الزر حسب الحالة
+if (isStandalone) {
+  installBtn.textContent = '🗑️ إلغاء التثبيت';
+  installBtn.addEventListener('click', () => {
+    alert('لحذف التطبيق، الرجاء حذفه من الشاشة الرئيسية يدويًا 🙏');
+  });
+} else {
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    installBtn.style.display = 'block';
+  });
+
+  installBtn.addEventListener('click', () => {
+    installBtn.style.display = 'none';
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the install prompt');
+        } else {
+          console.log('User dismissed the install prompt');
+        }
+        deferredPrompt = null;
+      });
+    }
+  });
+}
