@@ -1,6 +1,6 @@
 {
   "name": "Solly Calculator",
-  "short_name": "Calculator",
+  "short_name": "solly_calc",
   "start_url": "/calculator_services/",
   "display": "standalone",
   "background_color": "#ffffff",
