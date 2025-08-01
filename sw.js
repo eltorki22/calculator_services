@@ -1,9 +1,9 @@
 const CACHE_NAME = 'calculator-cache-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/calculator.js',
+  '/calculator_services/',
+  '/calculator_services/index.html',
+  '/calculator_services/style.css',
+  '/calculator_services/calculator.js',
   'https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.1/math.min.js'
 ];
 
