@@ -1,0 +1,94 @@
+/* Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  background: #f0f2f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.calculator {
+  background: #1e1e1e;
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+  padding: 20px;
+  width: 400px;
+  position: relative;
+
+}
+
+.display {
+  background: #2e2e2e;
+  color: #fff;
+  font-size: 2.5rem;
+  text-align: right;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.btn {
+  background: #333;
+  color: #fff;
+  font-size: 1.5rem;
+  padding: 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn:hover {
+  background: #444;
+}
+
+.btn.orange {
+  background: #ff9f0a;
+  color: #fff;
+}
+
+.btn.gray {
+  background: #a6a6a6;
+  color: #000;
+}
+
+.btn.zero {
+  grid-column: span 2;
+}
+
+
+.install-button {
+  margin: 20px auto;
+  display: block;
+  padding: 12px 20px;
+  background-color: #ff9900;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 4px;
+
+}
+
+.install-button:hover {
+  background-color: #e08800;
+}
