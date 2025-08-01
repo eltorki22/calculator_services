@@ -54,11 +54,32 @@ function calculate() {
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('/calculator_services/sw.js')
-      .then((reg) => console.log('Service Worker Registered:', reg.scope))
-      .catch((err) => console.error('Service Worker Error:', err));
-  });
+//     navigator.serviceWorker
+//       .register('/calculator_services/sw.js')
+//       .then((reg) => console.log('Service Worker Registered:', reg.scope))
+//       .catch((err) => console.error('Service Worker Error:', err));
+//   });
+
+navigator.serviceWorker.register('/calculator_services/sw.js').then((reg) => {
+  console.log('Service Worker Registered:', reg.scope);
+
+  // التحقق من وجود تحديث
+  reg.onupdatefound = () => {
+    const newSW = reg.installing;
+    newSW.onstatechange = () => {
+      if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
+        // إظهار إشعار
+        if (Notification.permission === 'granted') {
+          new Notification("🔄 تم تحديث التطبيق", {
+            body: "تم تحديث الكاش، يُفضل إعادة تحميل الصفحة.",
+            icon: "/calculator_services/img/apple-touch-icon.png"
+          });
+        }
+      }
+    };
+  };
+});
+
 }
 
 
@@ -131,3 +152,31 @@ if (isStandalone) {
     }
   });
 }
+
+
+
+// === الإشعارات المتكررة مع صوت ===
+function playNotificationSound() {
+  const audio = new Audio('/calculator_services/sounds/1.mp3');
+  audio.play().catch((e) => console.warn('الصوت لم يعمل:', e));
+}
+
+function sendNotificationWithSound(title, body) {
+  if (Notification.permission === 'granted') {
+    new Notification(title, {
+      body,
+      icon: '/calculator_services/img/apple-touch-icon.png'
+    });
+    playNotificationSound();
+  }
+}
+
+// طلب الإذن من المستخدم
+if (Notification.permission === 'default') {
+  Notification.requestPermission();
+}
+
+// إشعار كل 20 ثانية
+setInterval(() => {
+  sendNotificationWithSound('🔔 تنبيه', 'مر 20 ثانية وانت بتستخدم الآلة الحاسبة');
+}, 20000);
